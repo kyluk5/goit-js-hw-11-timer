@@ -11,10 +11,10 @@ class CountdownTimer {
   }
 
   timeOut(targetDate) {
-    setInterval(() => {
+    const timeIsOut = setInterval(() => {
       const curentTime = Date.now();
       const timeLeft = targetDate - curentTime;
-      this.timeCalculate(timeLeft);
+      this.timeCalculate(timeLeft, timeIsOut);
     }, 1000);
   }
 
@@ -22,7 +22,7 @@ class CountdownTimer {
     return String(value).padStart(2, "0");
   }
 
-  timeCalculate(time) {
+  timeCalculate(time, timeIsOut) {
     const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
     const hours = this.pad(
       Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -34,6 +34,14 @@ class CountdownTimer {
     this.ref.spanHour.textContent = hours;
     this.ref.spanMin.textContent = mins;
     this.ref.spanSec.textContent = secs;
+
+    if (time < 0) {
+      clearInterval(timeIsOut);
+      this.ref.spanDay.textContent = "00";
+      this.ref.spanHour.textContent = "00";
+      this.ref.spanMin.textContent = "00";
+      this.ref.spanSec.textContent = "00";
+    }
   }
 }
 new CountdownTimer({
